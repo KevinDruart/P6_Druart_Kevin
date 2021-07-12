@@ -190,6 +190,6 @@ Procédure
  
 Informations complémentaires
 Le nombre de likes/dislikes et les tableaux like/dislike doivent être mis à jour pour mettre en œuvre la fonctionnalité.
- 
+
 
 
