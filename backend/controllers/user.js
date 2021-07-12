@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken'); // importation du package jsonwebtoken
 const bcrypt = require('bcrypt'); // importation du package bcrypt
 const User = require('../models/user'); // importation du model/schema User
 
-// INSCRIPTION D'UN UTILISATEUR + CHIFFRAGE MDP (BCRYPT)
+// INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
@@ -24,6 +24,7 @@ exports.signup = (req, res, next) => {
         if (!user) {
           return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
+        console.log(req.body.password, user.password);
         bcrypt.compare(req.body.password, user.password)
           .then(valid => {
             if (!valid) {
@@ -33,12 +34,18 @@ exports.signup = (req, res, next) => {
               userId: user._id,
               token: jwt.sign(
                 { userId: user._id },
-                process.env.TOKEN_PASS,
+                'GERUHFBERLJHBRFJRH',
                 { expiresIn: '24h' }
               )
             });
           })
-          .catch(error => res.status(500).json({ error }));
+          .catch(error => {
+              console.log("error1",error);
+              res.status(500).json({ error })
+          });
       })
-      .catch(error => res.status(500).json({ error }));
+      .catch(error => {
+        console.log("error2");
+        res.status(500).json({ error })
+    });
   };
