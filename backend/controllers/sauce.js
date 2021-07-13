@@ -1,10 +1,10 @@
-const sauce = require('../models/sauce');
+const SauceModele = require('../models/sauce');
 const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
-  delete sauceObject._id; 
-  const sauce = new sauce({
+  //delete sauceObject._id; 
+  const sauce = new SauceModele({
       ...sauceObject, 
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
       likes: 0,
@@ -13,13 +13,13 @@ exports.createSauce = (req, res, next) => {
   sauce.save()
       .then(() => res.status(201).json({ message: 'Sauce enregistrée' }))
       .catch(error => { 
-        console.log('erreur ajout sauce');
+        console.log(error);
         res.status(400).json({ error })
       });
 };
 
 exports.getOneSauce = (req, res, next) => {
-  sauce.findOne({
+  SauceModele.findOne({
     _id: req.params.id
   })
   .then((sauce) => { res.status(200).json(sauce); })
@@ -35,7 +35,7 @@ exports.modifySauce = (req, res, next) => {
       ...JSON.parse(req.body.sauce),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-  sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+  SauceModele.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'sauce modifié !' }))
     .catch(error => {
       console.log("erreur modification")
@@ -44,7 +44,7 @@ exports.modifySauce = (req, res, next) => {
 };
   
 exports.deleteSauce = (req, res, next) => {
-  sauce.findOne({ _id: req.params.id })
+  SauceModele.findOne({ _id: req.params.id })
     .then(sauce => {
       const filename = sauce.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
@@ -63,7 +63,7 @@ exports.deleteSauce = (req, res, next) => {
 };
   
 exports.getAllSauce = (req, res, next) => {
-  sauce.find()
+  SauceModele.find()
   .then(
     (sauce) => { res.status(200).json(sauce); })
     .catch(
