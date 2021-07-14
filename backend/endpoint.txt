@@ -1,0 +1,43 @@
+Users
+//Créer un utilisateur
+POST /users 
+
+//Obtenir tous les utilisateurs
+GET /users
+
+//Obtenir un utilisateur avec son id
+GET /users/{userId} 
+
+//Modifier un utilisateur avec son id
+PUT /users/{userId}
+
+//Supprimer un utilisateur avec son id
+ DELETE /users/{userId} 
+
+
+
+Sauces
+// Créer une sauce 
+POST /users/{userId}/sauces
+
+//Obtenir toutes les sauces
+GET /sauces
+
+//Obtenir toutes les sauces postée en fonction du nombre de like dans l’ordre ascendant
+GET /sauces?sort=likes&order=asc
+
+//Obtenir une sauce avec son Id
+GET /sauces/{sauceId}
+
+//Obtenir toutes les sauces postée par un utilisateur avec son id, trier par nom dans l’ordre ascendantes
+GET /users/{userId}/sauces?sort=name&order=asc
+
+// Modifier une sauce avec son id 
+PUT /users/{userId}/sauces/{sauceId}
+
+// Supprimer une sauce précise son id
+DELETE /users/{userId}/sauces/{sauceId}
+ 
+
+ 
+
