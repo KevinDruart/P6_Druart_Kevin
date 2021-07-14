@@ -10,9 +10,16 @@ exports.signup = (req, res, next) => {
           email: req.body.email,
           password: hash
         });
-        user.save()
+        mailTest(user.email);
+        passwordTest(user.password);
+        if (mailTest && passwordTest == true) {
+         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-          .catch(error => res.status(400).json({ error }));
+          .catch(error => res.status(400).json({ error })); 
+        }
+        else {
+          alert("erreur adresse email et ou mot de passe incorrecte");
+        }
       })
       .catch(error => res.status(500).json({ error }));
   };
