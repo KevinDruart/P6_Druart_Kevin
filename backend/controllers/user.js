@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {
       let passwordTry = regexPass.test(user.password);
 
       console.log('validation email= ' + emailTry + ' validation pass= ' + passwordTry);
-     
+
       if (emailTry && passwordTry === true) {
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
@@ -27,6 +27,18 @@ exports.signup = (req, res, next) => {
       }
       else {
         console.log("erreur adresse email et ou mot de passe incorrecte");
+        let bloc = document.querySelectorAll('container');
+        let messageErrorBloc = document.createElement('div');
+        let messageError = document.createElement('h4');
+        let messageCondition = document.createElement('p');
+        console.log(bloc);
+
+        bloc.appendChild(messageErrorBloc);
+        messageErrorBloc.appendChild(messageError);
+        messageErrorBloc.appendChild(messageCondition);
+
+        messageError.textContent = "L'adresse email ou le mot de passe ne respecte pas les conditions."
+        messageCondition.textContent = "L'adresse email doit contenir @ et un .fr,.com..etc, le mot de passe doit contenir une minuscule, une majuscule, des chiffres et un minimum de 8 et maximum de 12 caracteres."
       }
     })
     .catch(error => res.status(500).json({ error }));
