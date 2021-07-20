@@ -83,7 +83,7 @@ exports.likeDislike = (req, res, next) => {
 
   // S'il clique j'aime(On push l'utilisateur et on incrémente le compteur like de 1)
   if (like === 1) {
-    Sauce.updateOne({
+    SauceModele.updateOne({
       _id: sauceId
     }, {
       // On push l'utilisateur
@@ -104,7 +104,7 @@ exports.likeDislike = (req, res, next) => {
   }
   // S'il clique je n'aime pas (On push l'utilisateur et on incrémente le compteur dislike de 1)
   if (like === -1) {
-    Sauce.updateOne(
+    SauceModele.updateOne(
       {
         _id: sauceId
       }, {
