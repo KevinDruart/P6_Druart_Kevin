@@ -95,12 +95,8 @@ exports.likeDislike = (req, res, next) => {
         likes: +1
       },
     })
-      .then(() => res.status(200).json({
-        message: 'j\'aime ajouté !'
-      }))
-      .catch((error) => res.status(400).json({
-        error
-      }))
+      .then(() => res.status(200).json({ message: "j'aime ajouté !" }))
+      .catch((error) => res.status(400).json({ error }))
   }
   // S'il clique je n'aime pas (On push l'utilisateur et on incrémente le compteur dislike de 1)
   if (like === -1) {
@@ -116,15 +112,11 @@ exports.likeDislike = (req, res, next) => {
       $inc: {
         dislikes: +1
       },
-    }
-    )
+    })
       .then(() => {
-        res.status(200).json({
-          message: 'Dislike ajouté !'
-        })
+        res.status(200).json({ message: "Dislike ajouté !" })
       })
-      .catch((error) => res.status(400).json({
-        error
-      }))
+      .catch((error) => res.status(400).json({ error })
+      )
   }
 }
