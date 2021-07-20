@@ -71,3 +71,7 @@ exports.getAllSauce = (req, res, next) => {
       console.log("erreur recherche toutes les sauces"); 
       res.status(400).json({ error: error }); })
 };
+
+exports.likeDislike = (req, res, next) => {
+
+}
