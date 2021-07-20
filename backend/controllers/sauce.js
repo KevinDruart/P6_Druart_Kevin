@@ -120,7 +120,12 @@ exports.likeDislike = (req, res, next) => {
       )
   }
   if (like === 0) {
+    SauceModele.findOne({
+      _id: sauceId
+    })
+      .then((sauce) => {
 
+     })
+      .catch((error) => res.status(404).json({ error }))
   }
-
 }
