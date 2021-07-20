@@ -124,7 +124,21 @@ exports.likeDislike = (req, res, next) => {
       _id: sauceId
     })
       .then((sauce) => {
-
+        if (sauce.usersLiked.includes(userId)) {
+          Sauce.updateOne({
+            _id: sauceId
+          }, {
+            $pull: {
+              usersLiked: userId
+            },
+            // On incrémente de -1 like
+            $inc: {
+              likes: -1
+            }, 
+          })
+          .then(() => res.status(200).json({ message: 'Like retiré !' }))
+          .catch((error) => res.status(400).json({ error }))
+        }
      })
       .catch((error) => res.status(404).json({ error }))
   }
