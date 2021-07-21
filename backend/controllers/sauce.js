@@ -1,6 +1,7 @@
 const SauceModele = require('../models/sauce');
 const fs = require('fs');
 
+//Creer une sauce
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   //delete sauceObject._id; 
@@ -14,10 +15,11 @@ exports.createSauce = (req, res, next) => {
     .then(() => res.status(201).json({ message: 'Sauce enregistrée' }))
     .catch(error => {
       console.log(error);
-      res.status(400).json({ error })
+      res.status(400).json({ error: "error ajout sauce" })
     });
 };
 
+//recuperer une sauce 
 exports.getOneSauce = (req, res, next) => {
   SauceModele.findOne({
     _id: req.params.id
@@ -25,10 +27,12 @@ exports.getOneSauce = (req, res, next) => {
     .then((sauce) => { res.status(200).json(sauce); })
     .catch((error) => {
       console.log("erreur recherche 1 sauce")
-      res.status(404).json({ error: error });
+      res.status(404).json({ error: "error recherche 1 sauce" });
     })
 };
 
+
+//modifier une sauce
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file ?
     {
@@ -39,10 +43,11 @@ exports.modifySauce = (req, res, next) => {
     .then(() => res.status(200).json({ message: 'sauce modifié !' }))
     .catch(error => {
       console.log("erreur modification")
-      res.status(400).json({ error })
+      res.status(400).json({ error:"erreur modification sauce" })
     });
 };
 
+//Supprimer une sauce
 exports.deleteSauce = (req, res, next) => {
   SauceModele.findOne({ _id: req.params.id })
     .then(sauce => {
@@ -52,16 +57,17 @@ exports.deleteSauce = (req, res, next) => {
           .then(() => res.status(200).json({ message: 'sauce supprimé !' }))
           .catch(error => {
             console.log("erreur image desolidarisation avant suppression 1 sauce")
-            res.status(400).json({ error })
+            res.status(400).json({ error: "suppresion une sauce" })
           });
       });
     })
     .catch(error => {
       console.log("erreur suppression 1 sauce")
-      res.status(500).json({ error })
+      res.status(500).json({ error:"suppression une sauce requete" })
     });
 };
 
+//Recuperer toutes les sauces
 exports.getAllSauce = (req, res, next) => {
   SauceModele.find()
     .then(
@@ -69,11 +75,11 @@ exports.getAllSauce = (req, res, next) => {
     .catch(
       (error) => {
         console.log("erreur recherche toutes les sauces");
-        res.status(400).json({ error: error });
+        res.status(400).json({ error: "error recherche sauce" });
       })
 };
 
-// Pour Ajout/annulation d'un like / dislike à une sauce
+//Ajout/annulation d'un like / dislike à une sauce
 exports.likeDislike = (req, res, next) => {
 
   // On recupere le like présent dans le body
@@ -98,7 +104,7 @@ exports.likeDislike = (req, res, next) => {
       },
     })
       .then(() => res.status(200).json({ message: "j'aime ajouté !" }))
-      .catch((error) => res.status(400).json({ error }))
+      .catch((error) => res.status(400).json({ error:"erreur ajout like" }))
   }
 
   // S'il s'agit d'un dislike (On push l'utilisateur et on incrémente le compteur dislike de 1)
@@ -120,7 +126,7 @@ exports.likeDislike = (req, res, next) => {
       .then(() => {
         res.status(200).json({ message: 'Dislike ajouté !' })
       })
-      .catch((error) => res.status(400).json({ error }))
+      .catch((error) => res.status(400).json({ error:"erreur ajout dislike" }))
   }
   // Si il s'agit d'annuler un like ou un dislike
   //annuler un like
@@ -142,7 +148,7 @@ exports.likeDislike = (req, res, next) => {
             },
           })
             .then(() => res.status(200).json({ message: 'Like retiré !' }))
-            .catch((error) => res.status(400).json({ error }))
+            .catch((error) => res.status(400).json({ error:"erreur annulation like" }))
         }
         //annuler un dislike
         if (sauce.usersDisliked.includes(userId)) {
@@ -158,9 +164,9 @@ exports.likeDislike = (req, res, next) => {
             },
           })
             .then(() => res.status(200).json({ message: 'Dislike retiré !' }))
-            .catch((error) => res.status(400).json({ error }))
+            .catch((error) => res.status(400).json({ error: "erreur annulation dislike" }))
         }
       })
-      .catch((error) => res.status(404).json({ error }))
+      .catch((error) => res.status(404).json({ error:"erreur annulation like/dislike requete" }))
   }
 }

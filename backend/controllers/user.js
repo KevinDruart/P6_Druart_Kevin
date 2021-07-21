@@ -4,31 +4,38 @@ const User = require('../models/user'); // importation du model/schema User
 
 // INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
 exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash
-      });
+  let regexMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  let emailTry = regexMail.test(req.body.email);
 
-      let regexMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      let emailTry = regexMail.test(user.email);
+  let regexPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+  let passwordTry = regexPass.test(req.body.password);
+  if (emailTry && passwordTry) {
+    bcrypt.hash(req.body.password, 10)
+      .then(hash => {
+        const user = new User({
+          email: req.body.email,
+          password: hash
+        });
 
-      let regexPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-      let passwordTry = regexPass.test(user.password);
+      })
+      .catch(error => res.status(500).json({ error: "erreur creation utilisateur requete" }));
 
-      if (emailTry && passwordTry) {
-        user.save()
-          .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-          .catch(error => res.status(400).json({ error }));
-      }
-      else {
-        console.log("erreur adresse email et ou mot de passe incorrecte");
-        console.log(user.email + '=' + emailTry + ' et ' + user.password + '=' + passwordTry);
-        res.status(400).json({ error: 'une erreur est survenue, ' + 'email: ' + emailTry + ' et ' + 'password: ' +  passwordTry })
-      }
-    })
-    .catch(error => res.status(500).json({ error }));
+    user.save()
+      .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+      .catch(error => res.status(400).json({ error: "erreur creation utilisateur" }));
+  }
+  else {
+    console.log("erreur adresse email et ou mot de passe incorrecte");
+    if (emailTry === false) {
+      console.log("erreur adresse email");
+      res.status(400).json({ error: "l'adresse mail ne correspond pas aux conditions" })
+    }
+    if (passwordTry === false) {
+      console.log("erreur password");
+      res.status(400).json({ error: "le mot de passe ne correspond pas aux conditions" })
+    }//fin if passwordtry
+  }//fin else
+
 };
 
 // CONNEXION UTILISATEUR + LOG TOKEN
@@ -55,11 +62,11 @@ exports.login = (req, res, next) => {
         })
         .catch(error => {
           console.log("error1", error);
-          res.status(500).json({ error })
+          res.status(500).json({ error: "error connexion 1" })
         });
     })
     .catch(error => {
       console.log("error2");
-      res.status(500).json({ error })
+      res.status(500).json({ error: "error connexion 2" })
     });
 };
