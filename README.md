@@ -42,7 +42,7 @@ sa machine ;
 * les adresses mails de la base de données sont uniques et un plugin Mongoose
 approprié est utilisé pour s’assurer de leur caractère unique et rapporter des erreurs.
 
-
+#### Documentation complete du projet
 * Guidelines API: [ici](https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P6/Guidelines+API.pdf)
 * Si vous avez besoin de la note de cadrage [ici](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P6/P6_Note%20de%20cadrage%20So%20Pekocko_V3.pdf)
 
