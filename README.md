@@ -71,9 +71,9 @@ Vous pouvez cloner ce repository pour récupérer en local le site modifier comp
 * Cloner ce projet depuis GitHub.
 
 * À partir du dossier du dossier backend, exécutez npm install.
+
 * Démarrer le serveur, executez nodemon server.
 
-* Le serveur doit s'exécuter sur localhost avec le port par défaut 3000.
 
 ***
 
