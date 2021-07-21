@@ -43,7 +43,7 @@ sa machine ;
 approprié est utilisé pour s’assurer de leur caractère unique et rapporter des erreurs.
 
 
-*Guidelines API: [ici](https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P6/Guidelines+API.pdf)
+*Guidelines API: [ici](https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P6/Guidelines+API.pdf);
 *Si vous avez besoin de la note de cadrage [ici](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P6/P6_Note%20de%20cadrage%20So%20Pekocko_V3.pdf)
 
 
@@ -85,7 +85,7 @@ Vous pouvez cloner ce repository pour récupérer en local le site modifier comp
 | framework                | Express            |
 | serveur                  | NodeJs             |
 | base de données          | MondoDb            |
-| shemas                   | Mongoose           |
+| schemas                  | Mongoose           |
 | javascript               | Visual studio code |
 
 
