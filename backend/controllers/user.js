@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken'); 
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/user'); 
+const User = require('../models/user');
 
 // INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
 exports.signup = (req, res, next) => {
@@ -15,24 +15,18 @@ exports.signup = (req, res, next) => {
       });
       // On enregistre l'utilisateur dans la base de données
       user.save()
-        .then(() => res.status(201).json({
-          message: 'Utilisateur créé !'
-        }))
-        .catch(error => res.status(400).json({
-          error
-        })); 
+        .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
+        .catch(error => res.status(400).json({ error: "erreur 1"}));
+        console.log("erreur inscription");
     })
-    .catch(error => res.status(500).json({
-      error
-    }));
-
+    .catch(error => res.status(500).json({ error }));
 };
 
 exports.login = (req, res, next) => {
   // On doit trouver l'utilisateur dans la BDD qui correspond à l'adresse entrée par l'utilisateur
   User.findOne({
-      email: req.body.email
-    })
+    email: req.body.email
+  })
     .then(user => {
       if (!user) {
         return res.status(401).json({
@@ -47,14 +41,14 @@ exports.login = (req, res, next) => {
               error: 'Mot de passe incorrect !'
             });
           }
-          res.status(200).json({ 
+          res.status(200).json({
             userId: user._id,
-            token: jwt.sign( 
+            token: jwt.sign(
               {
                 userId: user._id
-              }, 
+              },
               // Clé d'encodage du token
-              'GERUHFBERLJHBRFJRH', 
+              'GERUHFBERLJHBRFJRH',
               // expiration au bout de 24h
               {
                 expiresIn: '24h'
