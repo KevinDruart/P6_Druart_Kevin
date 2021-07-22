@@ -22,7 +22,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  // On doit trouver l'utilisateur dans la BDD qui correspond à l'adresse entrée par l'utilisateur
+  // On doit trouver l'utilisateur qui correspond à l'adresse entrée par l'utilisateur
   User.findOne({
     email: req.body.email
   })

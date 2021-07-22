@@ -21,13 +21,18 @@ exports.createSauce = (req, res, next) => {
 
 //recuperer une sauce 
 exports.getOneSauce = (req, res, next) => {
-  SauceModele.findOne({
-    _id: req.params.id
-  })
-    .then((sauce) => { res.status(200).json(sauce); })
-    .catch((error) => {
-      console.log("erreur recherche 1 sauce")
-      res.status(404).json({ error: "sauce introuvable" });
+  //on recherche la sauce contenant l'id
+  SauceModele.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      if (sauce === null) {
+        res.status(404).json({ error: "sauce introuvable" })
+      }
+      else {
+        res.status(200).json(sauce)
+      }
+    })
+    .catch(error => {
+      res.status(404).json({ error: "sauce introuvable" })
     })
 };
 
@@ -43,7 +48,7 @@ exports.modifySauce = (req, res, next) => {
     .then(() => res.status(200).json({ message: 'sauce modifié !' }))
     .catch(error => {
       console.log("erreur modification")
-      res.status(400).json({ error:"erreur modification sauce" })
+      res.status(400).json({ error: "erreur modification sauce" })
     });
 };
 
@@ -63,7 +68,7 @@ exports.deleteSauce = (req, res, next) => {
     })
     .catch(error => {
       console.log("erreur suppression 1 sauce")
-      res.status(500).json({ error:"suppression une sauce requete" })
+      res.status(500).json({ error: "suppression une sauce requete" })
     });
 };
 
@@ -104,7 +109,7 @@ exports.likeDislike = (req, res, next) => {
       },
     })
       .then(() => res.status(200).json({ message: "j'aime ajouté !" }))
-      .catch((error) => res.status(400).json({ error:"erreur ajout like" }))
+      .catch((error) => res.status(400).json({ error: "erreur ajout like" }))
   }
 
   // S'il s'agit d'un dislike (On push l'utilisateur et on incrémente le compteur dislike de 1)
@@ -126,7 +131,7 @@ exports.likeDislike = (req, res, next) => {
       .then(() => {
         res.status(200).json({ message: 'Dislike ajouté !' })
       })
-      .catch((error) => res.status(400).json({ error:"erreur ajout dislike" }))
+      .catch((error) => res.status(400).json({ error: "erreur ajout dislike" }))
   }
   // Si il s'agit d'annuler un like ou un dislike
   //annuler un like
@@ -148,7 +153,7 @@ exports.likeDislike = (req, res, next) => {
             },
           })
             .then(() => res.status(200).json({ message: 'Like retiré !' }))
-            .catch((error) => res.status(400).json({ error:"erreur annulation like" }))
+            .catch((error) => res.status(400).json({ error: "erreur annulation like" }))
         }
         //annuler un dislike
         if (sauce.usersDisliked.includes(userId)) {
@@ -167,6 +172,6 @@ exports.likeDislike = (req, res, next) => {
             .catch((error) => res.status(400).json({ error: "erreur annulation dislike" }))
         }
       })
-      .catch((error) => res.status(404).json({ error:"erreur annulation like/dislike requete" }))
+      .catch((error) => res.status(404).json({ error: "erreur annulation like/dislike requete" }))
   }
 }
