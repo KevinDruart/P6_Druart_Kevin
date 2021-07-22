@@ -27,7 +27,7 @@ exports.getOneSauce = (req, res, next) => {
     .then((sauce) => { res.status(200).json(sauce); })
     .catch((error) => {
       console.log("erreur recherche 1 sauce")
-      res.status(404).json({ error: "error recherche 1 sauce" });
+      res.status(404).json({ error: "sauce introuvable" });
     })
 };
 
