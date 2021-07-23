@@ -45,15 +45,12 @@ exports.modifySauce = (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   SauceModele.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-  console.log(req.body.userId + " userid")//ok
-  console.log(sauceObject.userId + " sauce userid")//ok
-
     .then(() => {
+      let user = req.body.userId;
+      console.log(user)
       //si l'utilisateur n'est pas celui qui a ajouter la sauce il ne peut pas modifier la sauce
-       let user = req.body.userId;
-       if (user.test(sauceObject.userId)) {
-         console.log(user.test(sauceObject.userId));
-      res.status(200).json({ message: 'sauce modifié !' })
+      if (user === sauceObject.userId) {
+        res.status(200).json({ message: 'sauce modifié !' })
       }
       else {
         res.status(400).json({ error: "Impossible de modifier une sauce qui n'est pas la notre" })
@@ -69,10 +66,20 @@ exports.modifySauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
   SauceModele.findOne({ _id: req.params.id })
     .then(sauce => {
+      //let sauceUserId = sauce.userId;
+      console.log(sauce);
       const filename = sauce.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
         sauce.deleteOne({ _id: req.params.id })
-          .then(() => res.status(200).json({ message: 'sauce supprimé !' }))
+          .then(() => {
+            let user = req.body.userId; 
+            if (user === sauce.userId) {
+              res.status(200).json({ message: 'sauce supprimé !' })
+            }
+            else {
+              res.status(400).json({ error: "vous n'etes pas le proprietaire de cet sauce" })
+            }
+          })
           .catch(error => {
             console.log("erreur image desolidarisation avant suppression 1 sauce")
             res.status(400).json({ error: "suppresion une sauce" })
