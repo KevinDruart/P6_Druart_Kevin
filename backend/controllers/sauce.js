@@ -15,7 +15,7 @@ exports.createSauce = (req, res, next) => {
     .then(() => res.status(201).json({ message: 'Sauce enregistrée' }))
     .catch(error => {
       console.log(error);
-      res.status(400).json({ error: "error ajout sauce" })
+      res.status(400).json({ error: "erreur ajout sauce" })
     });
 };
 
@@ -45,7 +45,12 @@ exports.modifySauce = (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   SauceModele.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'sauce modifié !' }))
+
+    .then(() =>
+    /*if (condition) {
+      
+    }*/
+      res.status(200).json({ message: 'sauce modifié !' }))
     .catch(error => {
       console.log("erreur modification")
       res.status(400).json({ error: "erreur modification sauce" })

@@ -55,3 +55,17 @@ exports.pepperValidator = [
     message: "Ne peut contenir que des caractères alphanumériques entre 3 et 20 caractères",
   }),
 ];
+
+// Validation pour le niveau de piquant de la sauce
+exports.heatValidator = [ 
+  validate({
+    validator: 'isLength',
+    arguments: [1, 2], // Le principal ingrédient doit contenir entre 3 et 20 caractères
+    message: 'doit contenir entre 1 et 2 caractères',
+  }),
+  validate({
+    validator: 'matches', 
+    arguments: /^[0-9][0]?$/i, // la note de piquant devra etre comprise entre 0 et 10
+    message: "La note doit etre comprise entre 0 et 10",
+  }),
+];
