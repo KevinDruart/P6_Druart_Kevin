@@ -60,12 +60,12 @@ exports.pepperValidator = [
 exports.heatValidator = [ 
   validate({
     validator: 'isLength',
-    arguments: [1, 2], // Le principal ingrédient doit contenir entre 3 et 20 caractères
+    arguments: [1, 2], // Le niveau de piquant doit contenir entre 1 et 2 caractères
     message: 'doit contenir entre 1 et 2 caractères',
   }),
   validate({
     validator: 'matches', 
     arguments: /^[0-9][0]?$/i, // la note de piquant devra etre comprise entre 0 et 10
-    message: "La note doit etre comprise entre 0 et 10",
+    message: "Le niveau de piquant doit etre compris entre 0 et 10",
   }),
 ];

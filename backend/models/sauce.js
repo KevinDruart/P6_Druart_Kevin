@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const sanitizerPlugin = require('mongoose-sanitizer-plugin');
 
 // Appel le middleware de validation des champs du model de la sauce
 const sauceValidation = require('../middleware/verifySauce');
@@ -57,5 +58,6 @@ const sauceSchema = mongoose.Schema({
     type: [String]
   },
 })
+sauceSchema.plugin(sanitizerPlugin);
 
 module.exports = mongoose.model('Sauce', sauceSchema);
