@@ -45,12 +45,20 @@ exports.modifySauce = (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   SauceModele.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+  console.log(req.body.userId + " userid")//ok
+  console.log(sauceObject.userId + " sauce userid")//ok
 
-    .then(() =>
-    /*if (condition) {
-      
-    }*/
-      res.status(200).json({ message: 'sauce modifié !' }))
+    .then(() => {
+      //si l'utilisateur n'est pas celui qui a ajouter la sauce il ne peut pas modifier la sauce
+       let user = req.body.userId;
+       if (user.test(sauceObject.userId)) {
+         console.log(user.test(sauceObject.userId));
+      res.status(200).json({ message: 'sauce modifié !' })
+      }
+      else {
+        res.status(400).json({ error: "Impossible de modifier une sauce qui n'est pas la notre" })
+      }
+    })
     .catch(error => {
       console.log("erreur modification")
       res.status(400).json({ error: "erreur modification sauce" })
