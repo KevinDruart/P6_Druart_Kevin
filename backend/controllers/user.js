@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const { db } = require('../models/user');
 
 // INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
 exports.signup = (req, res, next) => {
@@ -13,6 +14,11 @@ exports.signup = (req, res, next) => {
         email: req.body.email,
         password: hash
       });
+
+/*db.users.find({
+  "email" : "user.email":{“$exists” : 1}
+})*/
+
       // On enregistre l'utilisateur dans la base de données
       user.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
