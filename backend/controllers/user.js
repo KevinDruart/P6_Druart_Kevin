@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
-const { db } = require('../models/user');
 
 // INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
 exports.signup = (req, res, next) => {
+  
   // On appelle la méthode hash de bcrypt 
   bcrypt.hash(req.body.password, 10)
     // On récupère le hash de mdp qu'on va enregister en tant que nouvel utilisateur dans la BBD mongoDB
@@ -15,14 +15,10 @@ exports.signup = (req, res, next) => {
         password: hash
       });
 
-/*db.users.find({
-  "email" : "user.email":{“$exists” : 1}
-})*/
-
       // On enregistre l'utilisateur dans la base de données
       user.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
-        .catch(error => res.status(400).json({ error: "adresse email incorrecte"}));
+        .catch(error => res.status(400).json({ error: "adresse email deja utilisé"}));
     })
     .catch(error => res.status(500).json({ error: "erreur inscription" }));
 };

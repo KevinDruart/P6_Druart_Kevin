@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const xssClean = require('xss-clean');
+const hpp = require('hpp');
+
 
 const sauce = require('./models/sauce');
 const path = require('path');
@@ -25,7 +29,18 @@ app.use((req, res, next) => {
     next();
 });
 
+// Protection contre les attaques DOS
+app.use(hpp());
+
+// Protection contre les attaques XSS
+app.use(xssClean());
+
 app.use(bodyParser.json());
+
+//définit des en-têtes de réponse HTTP liés à la sécurité pour se protéger contre certaines vulnérabilités Web bien connues
+app.use(helmet());
+
+
 
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
