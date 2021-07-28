@@ -1,9 +1,19 @@
+//Importation des plugins requis
+//framework express
 const express = require('express');
+
+//extraction json
 const bodyParser = require('body-parser');
+
+//connexion a la base de données
 const mongoose = require('mongoose');
+
+//protection des requetes http
 const helmet = require('helmet');
-const xssClean = require('xss-clean');
 const hpp = require('hpp');
+
+//protection contres les attaques xss
+const xssClean = require('xss-clean');
 
 
 const sauce = require('./models/sauce');
@@ -41,9 +51,13 @@ app.use(bodyParser.json());
 app.use(helmet());
 
 
-
+// route sauces
 app.use('/api/sauces', sauceRoutes);
+
+//route users
 app.use('/api/auth', userRoutes);
+
+//routes de stockage pour les images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
