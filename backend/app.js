@@ -14,6 +14,7 @@ const hpp = require('hpp');
 
 //parametre cookie
 const cookieSession = require('cookie-session');
+const Keygrip = require('keygrip');
 
 //protection contres les attaques xss
 const xssClean = require('xss-clean');
