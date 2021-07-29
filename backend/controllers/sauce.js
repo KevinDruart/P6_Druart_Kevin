@@ -1,6 +1,7 @@
 //requis
 //schemas modele sauce
 const SauceModele = require('../models/sauce');
+// Récupération du module 'file system' de Node permettant de gérer les images
 const fs = require('fs');
 
 /*------------------------------------CREATE SAUCE------------------------------------- */
@@ -17,7 +18,7 @@ exports.createSauce = (req, res, next) => {
     .then(() => res.status(201).json({ message: 'Sauce enregistrée' }))
     .catch(error => {
       console.log(error);
-      res.status(400).json({ error: "erreur ajout sauce" })
+      res.status(400).json({ error: "la sauce ne peut pas etre ajouter, les données de celle-ci ne respecte pas les conditions." })
     });
 };
 
@@ -41,49 +42,58 @@ exports.getOneSauce = (req, res, next) => {
 
 /*---------------------------------READ ALL SAUCES--------------------------------- */
 exports.getAllSauce = (req, res, next) => {
+  //on recherche toutes les sauces
   SauceModele.find()
-    .then(
-      (sauce) => { res.status(200).json(sauce); })
+    .then((sauce) => {
+
+      res.status(200).json(sauce)
+
+    })
     .catch(
       (error) => {
         console.log("erreur recherche toutes les sauces");
-        res.status(400).json({ error: "error recherche sauce" });
+        res.status(400).json({ error: "erreur recherche sauces" });
       })
 };
 
 /*------------------------------------UPDATE SAUCE------------------------------------- */
 exports.modifySauce = (req, res, next) => {
-  const sauceObject = req.file ?
+  let sauceObject = {};
+  req.file ?
+    (
+      // Si la modification contient une image
+      SauceModele.findOne({
+        _id: req.params.id
+      }).then((sauce) => {
+        // On supprime l'ancienne image du serveur
+        const filename = sauce.imageUrl.split('/images/')[1]
+        fs.unlinkSync(`images/${filename}`)
+      }),
+      sauceObject = {
+        // On modifie les données et on ajoute la nouvelle image
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+      }
+    ) : (
+      // Si la modification ne contient pas de nouvelle image
+      sauceObject = {
+        ...req.body
+      }
+    )
+  SauceModele.updateOne(
+    // On applique les paramètre de sauceObject
     {
-      ...JSON.parse(req.body.sauce),
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
-  SauceModele.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-  
-    .then(sauce => {
-      console.log(sauce.id)
-      if (sauce.id === undefined) {
-        console.log("sauce introuvable");
-        res.status(404).json({ error: "Cet sauce n'existe pas ou est introuvable."})
-      }
-      else {
-        next;
-      }
-      //let user = req.body.userId;
-      //console.log(user)
-      //si l'utilisateur n'est pas celui qui a ajouter la sauce il ne peut pas modifier la sauce
-      if (req.body.userId === sauceObject.userId) {
-        res.status(200).json({ message: 'sauce modifié !' })
-      }
-      else {
-        res.status(400).json({ error: "Impossible de modifier une sauce qui n'est pas la notre" })
-      }
-    })
-    .catch(error => {
-      console.log("erreur");
-      res.status(400).json({ error: "erreur modification." })
-    });
-};
+      _id: req.params.id
+    }, {
+    ...sauceObject,
+    _id: req.params.id
+  }
+  )
+    .then(() => res.status(200).json({ message: 'Sauce modifiée !' })
+    )
+    .catch((error) => res.status(400).json({ error: 'la sauce est introuvable' })
+    )
+}
 
 
 
@@ -97,13 +107,9 @@ exports.deleteSauce = (req, res, next) => {
       fs.unlink(`images/${filename}`, () => {
         sauce.deleteOne({ _id: req.params.id })
           .then(() => {
-            let user = req.body.userId; 
-            if (user === sauce.userId) {
-              res.status(200).json({ message: 'sauce supprimé !' })
-            }
-            else {
-              res.status(400).json({ error: "vous n'etes pas le proprietaire de cet sauce" })
-            }
+
+            res.status(200).json({ message: 'sauce supprimé !' })
+
           })
           .catch(error => {
             console.log("erreur image desolidarisation avant suppression 1 sauce")

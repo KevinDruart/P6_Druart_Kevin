@@ -73,7 +73,6 @@ app.use(bodyParser.json());
 //définit des en-têtes de réponse HTTP liés à la sécurité pour se protéger contre certaines vulnérabilités Web bien connues
 app.use(helmet());
 
-
 // route sauces
 app.use('/api/sauces', sauceRoutes);
 
@@ -82,5 +81,11 @@ app.use('/api/auth', userRoutes);
 
 //routes de stockage pour les images
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
+app.use((req, res) => {
+
+    res.status(404).json({ error: "cet route n'existe pas" });
+
+});
 
 module.exports = app;

@@ -10,8 +10,7 @@ const rateLimit = require("express-rate-limit");
 const createAccountLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 heure
     max: 2, // Blocage aprés 2 requetes
-    message:
-    "Trop de tentative de connexion, compte bloquer pendant 1 heure"
+    message:(JSON.stringify("Trop de tentative de connexion, compte bloquer pendant 1 heure"))
   });
 
 // Endpoint crée un nouvel utilisateur
