@@ -12,6 +12,9 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const hpp = require('hpp');
 
+//parametre cookie
+const cookieSession = require('cookie-session');
+
 //protection contres les attaques xss
 const xssClean = require('xss-clean');
 
@@ -38,6 +41,22 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+// Cookie session
+app.use(cookieSession({
+
+    name: 'session',
+    keys: new Keygrip([process.env.COOKIESECRET], 'SHA256', 'base64'),
+
+    // Cookie Options
+    path: '/',
+    httpOnly: true,
+    secure: true,
+    signed: true,
+    maxAge: 600000, // 10 minutes
+    sameSite: 'strict'
+}));
+
 
 // Protection contre les attaques DOS
 app.use(hpp());
