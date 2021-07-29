@@ -1,7 +1,9 @@
+//requis
+//schemas modele sauce
 const SauceModele = require('../models/sauce');
 const fs = require('fs');
 
-//Creer une sauce
+/*------------------------------------CREATE SAUCE------------------------------------- */
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   //delete sauceObject._id; 
@@ -19,7 +21,8 @@ exports.createSauce = (req, res, next) => {
     });
 };
 
-//recuperer une sauce 
+
+/*------------------------------------READ ONE SAUCE------------------------------------- */
 exports.getOneSauce = (req, res, next) => {
   //on recherche la sauce contenant l'id
   SauceModele.findOne({ _id: req.params.id })
@@ -36,8 +39,19 @@ exports.getOneSauce = (req, res, next) => {
     })
 };
 
+/*---------------------------------READ ALL SAUCES--------------------------------- */
+exports.getAllSauce = (req, res, next) => {
+  SauceModele.find()
+    .then(
+      (sauce) => { res.status(200).json(sauce); })
+    .catch(
+      (error) => {
+        console.log("erreur recherche toutes les sauces");
+        res.status(400).json({ error: "error recherche sauce" });
+      })
+};
 
-//modifier une sauce
+/*------------------------------------UPDATE SAUCE------------------------------------- */
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file ?
     {
@@ -45,11 +59,20 @@ exports.modifySauce = (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   SauceModele.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-    .then(() => {
-      let user = req.body.userId;
-      console.log(user)
+  
+    .then(sauce => {
+      console.log(sauce.id)
+      if (sauce.id === undefined) {
+        console.log("sauce introuvable");
+        res.status(404).json({ error: "Cet sauce n'existe pas ou est introuvable."})
+      }
+      else {
+        next;
+      }
+      //let user = req.body.userId;
+      //console.log(user)
       //si l'utilisateur n'est pas celui qui a ajouter la sauce il ne peut pas modifier la sauce
-      if (user === sauceObject.userId) {
+      if (req.body.userId === sauceObject.userId) {
         res.status(200).json({ message: 'sauce modifié !' })
       }
       else {
@@ -57,12 +80,14 @@ exports.modifySauce = (req, res, next) => {
       }
     })
     .catch(error => {
-      console.log("erreur modification")
-      res.status(400).json({ error: "erreur modification sauce" })
+      console.log("erreur");
+      res.status(400).json({ error: "erreur modification." })
     });
 };
 
-//Supprimer une sauce
+
+
+/*------------------------------------DELETE SAUCE------------------------------------- */
 exports.deleteSauce = (req, res, next) => {
   SauceModele.findOne({ _id: req.params.id })
     .then(sauce => {
@@ -92,19 +117,8 @@ exports.deleteSauce = (req, res, next) => {
     });
 };
 
-//Recuperer toutes les sauces
-exports.getAllSauce = (req, res, next) => {
-  SauceModele.find()
-    .then(
-      (sauce) => { res.status(200).json(sauce); })
-    .catch(
-      (error) => {
-        console.log("erreur recherche toutes les sauces");
-        res.status(400).json({ error: "error recherche sauce" });
-      })
-};
 
-//Ajout/annulation d'un like / dislike à une sauce
+/*---------------Ajout/annulation d'un like / dislike à une sauce----------------- */
 exports.likeDislike = (req, res, next) => {
 
   // On recupere le like présent dans le body
