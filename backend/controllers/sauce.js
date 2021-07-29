@@ -1,6 +1,7 @@
 //requis
 //schemas modele sauce
 const SauceModele = require('../models/sauce');
+// Récupération du module 'file system' de Node permettant de gérer les images
 const fs = require('fs');
 
 /*------------------------------------CREATE SAUCE------------------------------------- */
@@ -17,7 +18,7 @@ exports.createSauce = (req, res, next) => {
     .then(() => res.status(201).json({ message: 'Sauce enregistrée' }))
     .catch(error => {
       console.log(error);
-      res.status(400).json({ error: "erreur ajout sauce" })
+      res.status(400).json({ error: "la sauce ne peut pas etre ajouter, les données de celle-ci ne respecte pas les conditions." })
     });
 };
 
@@ -41,6 +42,7 @@ exports.getOneSauce = (req, res, next) => {
 
 /*---------------------------------READ ALL SAUCES--------------------------------- */
 exports.getAllSauce = (req, res, next) => {
+  //on recherche toutes les sauces
   SauceModele.find()
     .then((sauce) => {
 
