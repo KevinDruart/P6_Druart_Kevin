@@ -3,6 +3,7 @@ const sanitizerPlugin = require('mongoose-sanitizer-plugin');
 
 // Appel le middleware de validation des champs du model de la sauce
 const sauceValidation = require('../middleware/verifySauce');
+const { validate } = require('./user');
 
 
 const sauceSchema = mongoose.Schema({
@@ -15,21 +16,25 @@ const sauceSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
+    validate: sauceValidation.nameValidator
   },
   // Marque de la sauce
   manufacturer: {
     type: String,
     required: true,
+    validate: sauceValidation.manufacturerValidator
   },
   // description de la sauce
   description: {
     type: String,
     required: true,
+    validate: sauceValidation.descriptionValidator
   },
   // Ingredients qui pimentent la sauce
   mainPepper: {
     type: String,
     required: true,
+    validate: sauceValidation.pepperValidator
   },
   // Adresse de l'image de presentation de la sauce
   imageUrl: {
@@ -38,8 +43,9 @@ const sauceSchema = mongoose.Schema({
   },
   // niveau du piquant de la sauce
   heat: {
-    type: Number,
-    required: true
+    type: String,
+    required: true,
+    validate: sauceValidation.heatValidator
   },
   // nombre de Like reçu
   likes: {
