@@ -25,7 +25,10 @@ const path = require('path');
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://userAdmin:gzdQHZbGu233g8c7@cluster0.oziog.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+require('dotenv').config();
+
+//Connexion a la base de données
+mongoose.connect(process.env.DB_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
