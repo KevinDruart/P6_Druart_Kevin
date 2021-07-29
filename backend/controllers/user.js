@@ -4,9 +4,9 @@ const User = require('../models/user');
 
 // INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
 exports.signup = (req, res, next) => {
-  
+  const saltRounds = 10;
   // On appelle la méthode hash de bcrypt 
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password, saltRounds)
     // On récupère le hash de mdp qu'on va enregister en tant que nouvel utilisateur dans la BBD mongoDB
     .then(hash => {
       // Création du nouvel utilisateur avec le model
@@ -17,7 +17,9 @@ exports.signup = (req, res, next) => {
 
       // On enregistre l'utilisateur dans la base de données
       user.save()
+        //aucune erreur, l'utilisateur est créé
         .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
+        //une erreur avec adresse email 
         .catch(error => res.status(400).json({ error: "adresse email deja utilisé"}));
     })
     .catch(error => res.status(500).json({ error: "erreur inscription" }));
