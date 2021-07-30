@@ -58,41 +58,51 @@ exports.getAllSauce = (req, res, next) => {
 
 /*------------------------------------UPDATE SAUCE------------------------------------- */
 exports.modifySauce = (req, res, next) => {
-  let sauceObject = {};
-  req.file ?
-    (
-      // Si la modification contient une image
-      SauceModele.findOne({
+
+  let user = req.userIdToken;
+  console.log(user);
+  if (user === req.body.userId) {
+    console.log(user === req.body.userId);
+    let sauceObject = {};
+    req.file ?
+      (
+        // Si la modification contient une image
+        SauceModele.findOne({
+          _id: req.params.id
+        }).then((sauce) => {
+          // On supprime l'ancienne image du serveur
+          const filename = sauce.imageUrl.split('/images/')[1]
+          fs.unlinkSync(`images/${filename}`)
+        }),
+        sauceObject = {
+          // On modifie les données et on ajoute la nouvelle image
+          ...JSON.parse(req.body.sauce),
+          imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        }
+      ) : (
+        // Si la modification ne contient pas de nouvelle image
+        sauceObject = {
+          ...req.body
+        }
+      )
+    SauceModele.updateOne(
+      // On applique les paramètre de sauceObject
+      {
         _id: req.params.id
-      }).then((sauce) => {
-        // On supprime l'ancienne image du serveur
-        const filename = sauce.imageUrl.split('/images/')[1]
-        fs.unlinkSync(`images/${filename}`)
-      }),
-      sauceObject = {
-        // On modifie les données et on ajoute la nouvelle image
-        ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-      }
-    ) : (
-      // Si la modification ne contient pas de nouvelle image
-      sauceObject = {
-        ...req.body
-      }
-    )
-  SauceModele.updateOne(
-    // On applique les paramètre de sauceObject
-    {
+      }, {
+      ...sauceObject,
       _id: req.params.id
-    }, {
-    ...sauceObject,
-    _id: req.params.id
+    }
+    )
+      .then(() => res.status(200).json({ message: 'Sauce modifiée !' })
+      )
+      .catch((error) => res.status(400).json({ error: 'la sauce est introuvable' })
+      )
   }
-  )
-    .then(() => res.status(200).json({ message: 'Sauce modifiée !' })
-    )
-    .catch((error) => res.status(400).json({ error: 'la sauce est introuvable' })
-    )
+  else {
+    res.status(401).json({ error: "vous n'etes pas le proprietaire de la sauce et ne pouvez pas la modifier." })
+  }
+
 }
 
 
