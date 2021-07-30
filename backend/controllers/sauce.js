@@ -58,9 +58,10 @@ exports.getAllSauce = (req, res, next) => {
 
 /*------------------------------------UPDATE SAUCE------------------------------------- */
 exports.modifySauce = (req, res, next) => {
-
+  //Récupération et sauvegarde dans une variable de l'userId
   let user = req.userIdToken;
   console.log(user);
+  //verification si userId = Sauce.userId (si l'utilisateur est propriètaire de la sauce)
   if (user === req.body.userId) {
     console.log(user === req.body.userId);
     let sauceObject = {};
@@ -109,9 +110,11 @@ exports.modifySauce = (req, res, next) => {
 
 /*------------------------------------DELETE SAUCE------------------------------------- */
 exports.deleteSauce = (req, res, next) => {
+  //Récupération et sauvegarde dans une variable de l'userId
   let user = req.userIdToken;
   console.log(user);
   console.log(user === req.body.userId);
+  //verification si userId = Sauce.userId (si l'utilisateur est propriètaire de la sauce)
   if (user === req.body.userId) {
     
     SauceModele.findOne({ _id: req.params.id })

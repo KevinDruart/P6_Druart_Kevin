@@ -5,6 +5,7 @@ const spaceRegex = /^ +$/;
 
 module.exports = (req, res, next) => {
 	try {
+
 		// nouvelle image
 		if (req.file) {
 			const sauce = JSON.parse(req.body.sauce);
