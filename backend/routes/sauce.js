@@ -5,6 +5,8 @@ const sauceCtrl = require('../controllers/sauce');
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
+//const sauceControl = require('../middleware/Controls');
+//const updateControl = require('../middleware/Controls.update');
 
 const sauceVerif = require('../middleware/createVerifSauce');
 const updateVerif = require('../middleware/updateVerifSauce');

@@ -111,8 +111,9 @@ exports.modifySauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
   let user = req.userIdToken;
   console.log(user);
+  console.log(user === req.body.userId);
   if (user === req.body.userId) {
-    console.log(user === req.body.userId);
+    
     SauceModele.findOne({ _id: req.params.id })
     .then(sauce => {
       //let sauceUserId = sauce.userId;
