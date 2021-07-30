@@ -47,7 +47,7 @@ exports.login = (req, res, next) => {
                 userId: user._id
               },
               // Clé d'encodage du token
-              'GERUHFBERLJHBRFJRH',
+              process.env.TOKEN,
               // expiration au bout de 24h
               {
                 expiresIn: '24h'
