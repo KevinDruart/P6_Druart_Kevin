@@ -1,11 +1,20 @@
+//securisation authentification avec un TOKEN genéré
 const jwt = require('jsonwebtoken');
+
+//hashage MDP
 const bcrypt = require('bcrypt');
+
+//schemas modele user
 const User = require('../models/user');
+
+//Encryptage 
 const cryptoJS = require('crypto-js');
 
-// INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
+/*-----------------------------------------SIGNUP--------------------------------------------*/
+// INSCRIPTION D'UN UTILISATEUR avec hashage MDP (BCRYPT) et encryptage email (crypto-js)
 exports.signup = (req, res, next) => {
-  	// Crypter l'email
+  
+  // Crypter l'email
 	const key = cryptoJS.enc.Hex.parse(process.env.KEY);
 	const iv = cryptoJS.enc.Hex.parse("8f4b9w7e4du8ya7d4fd5r7y1h1s4q7k9");
 	const encrypted = cryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
@@ -32,7 +41,10 @@ exports.signup = (req, res, next) => {
     .catch(error => res.status(500).json({ error: "erreur inscription" }));
 };
 
+
+/*-----------------------------------------LOGIN--------------------------------------------*/
 exports.login = (req, res, next) => {
+
   // Crypter le mail de la requete
   const key = cryptoJS.enc.Hex.parse(process.env.KEY);
 	const iv = cryptoJS.enc.Hex.parse("8f4b9w7e4du8ya7d4fd5r7y1h1s4q7k9");

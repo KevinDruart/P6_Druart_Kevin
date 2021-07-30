@@ -7,6 +7,7 @@ module.exports = (req, res, next) => {
         res.status(400).json({ error: "Format de mot de passe incorrect" })
     }
     else {
+        //on passe au middleware suivant
         next();
     }
 };

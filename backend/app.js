@@ -82,6 +82,7 @@ app.use('/api/auth', userRoutes);
 //routes de stockage pour les images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+//pour les routes qui n'existe pas
 app.use((req, res) => {
 
     res.status(404).json({ error: "cet route n'existe pas" });
