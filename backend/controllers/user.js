@@ -1,9 +1,16 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const cryptoJS = require('crypto-js');
 
 // INSCRIPTION D'UN UTILISATEUR + hashage MDP (BCRYPT)
 exports.signup = (req, res, next) => {
+  	// Crypter l'email
+	const key = cryptoJS.enc.Hex.parse(process.env.KEY);
+	const iv = cryptoJS.enc.Hex.parse("8f4b9w7e4du8ya7d4fd5r7y1h1s4q7k9");
+	const encrypted = cryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
+
+
   const saltRounds = 10;
   // On appelle la méthode hash de bcrypt 
   bcrypt.hash(req.body.password, saltRounds)
@@ -11,7 +18,7 @@ exports.signup = (req, res, next) => {
     .then(hash => {
       // Création du nouvel utilisateur avec le model
       const user = new User({
-        email: req.body.email,
+        email: encrypted,
         password: hash
       });
 
@@ -26,9 +33,14 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
+  // Crypter le mail de la requete
+  const key = cryptoJS.enc.Hex.parse(process.env.KEY);
+	const iv = cryptoJS.enc.Hex.parse("8f4b9w7e4du8ya7d4fd5r7y1h1s4q7k9");
+	const encrypted = cryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
+
   // On doit trouver l'utilisateur qui correspond à l'adresse entrée par l'utilisateur
   User.findOne({
-    email: req.body.email
+    email: encrypted
   })
     .then(user => {
       if (!user) {
