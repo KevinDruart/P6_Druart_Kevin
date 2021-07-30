@@ -109,7 +109,11 @@ exports.modifySauce = (req, res, next) => {
 
 /*------------------------------------DELETE SAUCE------------------------------------- */
 exports.deleteSauce = (req, res, next) => {
-  SauceModele.findOne({ _id: req.params.id })
+  let user = req.userIdToken;
+  console.log(user);
+  if (user === req.body.userId) {
+    console.log(user === req.body.userId);
+    SauceModele.findOne({ _id: req.params.id })
     .then(sauce => {
       //let sauceUserId = sauce.userId;
       console.log(sauce);
@@ -131,6 +135,11 @@ exports.deleteSauce = (req, res, next) => {
       console.log("erreur suppression 1 sauce")
       res.status(500).json({ error: "suppression une sauce requete" })
     });
+  }
+  else {
+    res.status(401).json({ error: "vous n'etes pas le proprietaire de la sauce et ne pouvez pas la supprimer."})
+  }
+  
 };
 
 
