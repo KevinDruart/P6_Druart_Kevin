@@ -72,6 +72,10 @@ Vous pouvez cloner ce repository pour récupérer en local le site modifier comp
 
 * À partir du dossier du dossier backend, exécutez npm install.
 
+* Une fois installer modifier le nom du fichier modele.env en .env .
+
+* Modifier le .env ligne1 DB_URL: "connect url db" et ajouter à la place de connect url db votre url mongoDb ou autre BDD.
+
 * Démarrer le serveur, executez nodemon server.
 
 
