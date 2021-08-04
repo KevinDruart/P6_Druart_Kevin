@@ -76,7 +76,8 @@ Vous pouvez cloner ce repository pour récupérer en local le site modifier comp
 
 * Modifier le .env ligne1 DB_URL: "connect url db" et ajouter à la place de connect url db votre url mongoDb ou autre BDD.
 
-* Démarrer le serveur, executez nodemon server.
+* Démarrer le serveur : -(PARTIE BACKEND), executez nodemon server
+                        -(PARTIE FRONTEND), executez npm start
 
 
 ***
