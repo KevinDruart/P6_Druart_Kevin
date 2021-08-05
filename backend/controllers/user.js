@@ -7,19 +7,13 @@ const bcrypt = require('bcrypt');
 //schemas modele user
 const User = require('../models/user');
 
-//Encryptage 
-const cryptoJS = require('crypto-js');
+const masked = require('masked');
+
 
 /*-----------------------------------------SIGNUP--------------------------------------------*/
 // INSCRIPTION D'UN UTILISATEUR avec hashage MDP (BCRYPT) et encryptage email (crypto-js)
 exports.signup = (req, res, next) => {
   
-  // Crypter l'email
-	const key = cryptoJS.enc.Hex.parse(process.env.KEY);
-	const iv = cryptoJS.enc.Hex.parse("8f4b9w7e4du8ya7d4fd5r7y1h1s4q7k9");
-	const encrypted = cryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
-
-
   const saltRounds = 10;
   // On appelle la méthode hash de bcrypt 
   bcrypt.hash(req.body.password, saltRounds)
@@ -27,10 +21,15 @@ exports.signup = (req, res, next) => {
     .then(hash => {
       // Création du nouvel utilisateur avec le model
       const user = new User({
-        email: encrypted,
+        email: req.body.email,
         password: hash
       });
 
+      //mask de l'adresse email
+      const maskedUser = masked(user, ['email']);
+      console.log(maskedUser);
+
+      user.emailMasked.push(maskedUser)
       // On enregistre l'utilisateur dans la base de données
       user.save()
         //aucune erreur, l'utilisateur est créé
@@ -45,14 +44,11 @@ exports.signup = (req, res, next) => {
 /*-----------------------------------------LOGIN--------------------------------------------*/
 exports.login = (req, res, next) => {
 
-  // Crypter le mail de la requete
-  const key = cryptoJS.enc.Hex.parse(process.env.KEY);
-	const iv = cryptoJS.enc.Hex.parse("8f4b9w7e4du8ya7d4fd5r7y1h1s4q7k9");
-	const encrypted = cryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
+
 
   // On doit trouver l'utilisateur qui correspond à l'adresse entrée par l'utilisateur
   User.findOne({
-    email: encrypted
+    email: req.body.email
   })
     .then(user => {
       if (!user) {
