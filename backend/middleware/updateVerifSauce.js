@@ -4,6 +4,7 @@ const fs = require('fs');
 const spaceRegex = /^ +$/;
 
 module.exports = (req, res, next) => {
+	console.log("bonjour");
 	try {
 
 		// nouvelle image
