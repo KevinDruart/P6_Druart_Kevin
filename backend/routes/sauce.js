@@ -8,7 +8,7 @@ const multer = require('../middleware/multer-config');
 //const sauceControl = require('../middleware/Controls');
 //const updateControl = require('../middleware/Controls.update');
 
-const sauceVerif = require('../middleware/createVerifSauce');
+
 const updateVerif = require('../middleware/updateVerifSauce');
 
 
@@ -16,7 +16,7 @@ const updateVerif = require('../middleware/updateVerifSauce');
 //endpoint toutes les sauces
 router.get('/', auth, sauceCtrl.getAllSauce);
 //endpoint ajout sauce
-router.post('/', auth, multer, sauceVerif, sauceCtrl.createSauce);
+router.post('/', auth, multer, sauceCtrl.createSauce);
 //endpoint une sauce
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 //endpoint modifier une sauce

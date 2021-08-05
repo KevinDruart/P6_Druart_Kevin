@@ -13,7 +13,7 @@ const masked = require('masked');
 /*-----------------------------------------SIGNUP--------------------------------------------*/
 // INSCRIPTION D'UN UTILISATEUR avec hashage MDP (BCRYPT) et encryptage email (crypto-js)
 exports.signup = (req, res, next) => {
-  
+
   const saltRounds = 10;
   // On appelle la méthode hash de bcrypt 
   bcrypt.hash(req.body.password, saltRounds)
@@ -24,18 +24,19 @@ exports.signup = (req, res, next) => {
         email: req.body.email,
         password: hash
       });
-
+      //ok adresse email 
+      console.log(user.email);
       //mask de l'adresse email
-      const maskedUser = masked(user, ['email']);
+      const maskedUser = masked(user,'email');
       console.log(maskedUser);
 
       user.emailMasked.push(maskedUser)
       // On enregistre l'utilisateur dans la base de données
       user.save()
         //aucune erreur, l'utilisateur est créé
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
+        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
         //une erreur avec adresse email 
-        .catch(error => res.status(400).json({ error: "adresse email deja utilisé"}));
+        .catch(error => res.status(400).json({ error: "adresse email deja utilisé" }));
     })
     .catch(error => res.status(500).json({ error: "erreur inscription" }));
 };
@@ -52,13 +53,13 @@ exports.login = (req, res, next) => {
   })
     .then(user => {
       if (!user) {
-        return res.status(401).json({ error: 'Adresse email et ou mot de passe incorrect !'});
+        return res.status(401).json({ error: 'Adresse email et ou mot de passe incorrect !' });
       }
       // On utilise bcrypt pour comparer les hashs et savoir si ils ont la même string d'origine
       bcrypt.compare(req.body.password, user.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({ error: 'Adresse email et ou mot de passe incorrect !'});
+            return res.status(401).json({ error: 'Adresse email et ou mot de passe incorrect !' });
           }
           res.status(200).json({
             userId: user._id,
