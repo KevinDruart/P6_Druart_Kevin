@@ -28,9 +28,10 @@ exports.signup = (req, res, next) => {
       console.log(user.email);
       //mask de l'adresse email
       const maskedUser = masked(user,'email');
-      console.log(maskedUser);
+      //console.log(maskedUser);
 
       user.emailMasked.push(maskedUser)
+      console.log(user);
       // On enregistre l'utilisateur dans la base de données
       user.save()
         //aucune erreur, l'utilisateur est créé

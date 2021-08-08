@@ -84,34 +84,35 @@ exports.modifySauce = (req, res, next) => {
         ...req.body
       }
     )
-  SauceModele.updateOne(
-    // On applique les paramètre de sauceObject
-    {
+  if (req.userIdToken === sauce.userId) {
+    SauceModele.updateOne(
+      // On applique les paramètre de sauceObject
+      {
+        _id: req.params.id
+      }, {
+      ...sauceObject,
       _id: req.params.id
-    }, {
-    ...sauceObject,
-    _id: req.params.id
+    }
+    )
+      .then(() => res.status(200).json({ message: 'Sauce modifiée !' })
+      )
+      .catch((error) => res.status(400).json({ error: 'la sauce est introuvable' })
+      )
   }
-  )
-    .then(() => res.status(200).json({ message: 'Sauce modifiée !' })
-    )
-    .catch((error) => res.status(400).json({ error: 'la sauce est introuvable' })
-    )
+  else {
+    res.status(401).json({ error: "Vous ne disposez pas des droits pour modifier cette sauce !" });
+  }
 }
 
 
 
 /*------------------------------------DELETE SAUCE------------------------------------- */
 exports.deleteSauce = (req, res, next) => {
-  //Récupération et sauvegarde dans une variable de l'userId
-  let user = req.userIdToken;
-  console.log(user);
-  console.log(user === req.body.userId);
-  //verification si userId = Sauce.userId (si l'utilisateur est propriètaire de la sauce)
-  if (user === req.body.userId) {
 
-    SauceModele.findOne({ _id: req.params.id })
-      .then(sauce => {
+  SauceModele.findOne({ _id: req.params.id })
+    .then(sauce => {
+      //verification si userId = Sauce.userId (si l'utilisateur est propriètaire de la sauce)
+      if (req.userIdToken === sauce.userId) {
         //let sauceUserId = sauce.userId;
         console.log(sauce);
         const filename = sauce.imageUrl.split('/images/')[1];
@@ -127,15 +128,15 @@ exports.deleteSauce = (req, res, next) => {
               res.status(400).json({ error: "suppresion une sauce" })
             });
         });
-      })
-      .catch(error => {
-        console.log("erreur suppression 1 sauce")
-        res.status(500).json({ error: "suppression une sauce requete" })
-      });
-  }
-  else {
-    res.status(401).json({ error: "vous n'etes pas le proprietaire de la sauce et ne pouvez pas la supprimer." })
-  }
+      }
+      else {
+        res.status(401).json({ error: "Vous ne disposez pas des droits pour supprimer cette sauce !" })
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: "suppression une sauce requete" })
+    });
+
 
 };
 
