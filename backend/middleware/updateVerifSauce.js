@@ -14,18 +14,29 @@ module.exports = (req, res, next) => {
 
 		// Vérifier que les champs texte soient remplis
 		if (name.length > 0 && manufacturer.length > 0 && description.length > 0 && mainPepper.length > 0) {
-			
+
 			// si tout est ok, on récupère les champs sans les espaces
 			sauce.name = name;
 			sauce.manufacturer = manufacturer;
 			sauce.description = description;
 			sauce.mainPepper = mainPepper;
-			
-			// et on peut passer la requête au prochain middleware
-			req.body.sauce = JSON.stringify(sauce);
 
-			//on passe au middleware suivant
-			next();
+			const regexSauce = new RegExp("^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,-.]*$");
+			// exclut tous ce qui n'est pas alphanumérique sauf ., et -
+			if (
+				!regexSauce.test(req.body.name) ||
+				!regexSauce.test(req.body.manufacturer) ||
+				!regexSauce.test(req.body.description) ||
+				!regexSauce.test(req.body.mainPepper)
+			) {
+				res.status(400).json({ error:"Veillez à n'utiliser que des chiffres, des lettres et les caractères , . -" });
+			} else {
+				// et on peut passer la requête au prochain middleware
+				req.body.sauce = JSON.stringify(sauce);
+				//on passe au middleware suivant
+				next();
+			}
+
 		} else {
 			// sinon on supprime la nouvelle image que multer a déjà sauvegardé
 			fs.unlink(`images/${req.file.filename}`, () => {
