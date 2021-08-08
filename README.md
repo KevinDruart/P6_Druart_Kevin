@@ -74,7 +74,12 @@ Vous pouvez cloner ce repository pour récupérer en local le site modifier comp
 
 * Une fois installer modifier le nom du fichier modele.env en .env .
 
-* Modifier le .env ligne1 DB_URL: "connect url db" et ajouter à la place de connect url db votre url mongoDb ou autre BDD.
+* Modifier le .env :
+DB_URL="string de connexion à mongoDB sous la forme suivante ==> mongodb+srv://USERNAME:USERPASSWORD@CLUSTERNAME.vblzk.mongodb.net/DATABASENAME?retryWrites=true&w=majority"
+TOKEN="clé de chiffrement aléatoire"
+COOKIESECRET="clé de chiffrement aléatoire"
+
+
 
 * Pour démarrer le serveur, executez les commandes suivantes :
                         
