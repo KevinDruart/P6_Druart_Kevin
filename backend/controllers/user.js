@@ -19,19 +19,22 @@ exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, saltRounds)
     // On récupère le hash de mdp qu'on va enregister en tant que nouvel utilisateur dans la BBD mongoDB
     .then(hash => {
+      //mask de l'adresse email
+      
       // Création du nouvel utilisateur avec le model
       const user = new User({
         email: req.body.email,
+        emailMasked: req.body.email,
         password: hash
       });
-      //ok adresse email 
-      console.log(user.email);
-      //mask de l'adresse email
-      const maskedUser = masked(user,'email');
-      //console.log(maskedUser);
 
-      user.emailMasked.push(maskedUser)
-      console.log(user);
+      const maskedUser = masked(user,'emailMasked');
+      console.log(maskedUser);
+
+      user.emailMasked.push(maskedUser.emailMasked);
+
+      //console.log(user);
+
       // On enregistre l'utilisateur dans la base de données
       user.save()
         //aucune erreur, l'utilisateur est créé
