@@ -24,10 +24,10 @@ module.exports = (req, res, next) => {
 			const regexSauce = new RegExp("^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,-.]*$");
 			// exclut tous ce qui n'est pas alphanumérique sauf ., et -
 			if (
-				!regexSauce.test(req.body.name) ||
-				!regexSauce.test(req.body.manufacturer) ||
-				!regexSauce.test(req.body.description) ||
-				!regexSauce.test(req.body.mainPepper)
+				!regexSauce.test(sauce.name) ||
+				!regexSauce.test(sauce.manufacturer) ||
+				!regexSauce.test(sauce.description) ||
+				!regexSauce.test(sauce.mainPepper)
 			) {
 				res.status(400).json({ error:"Veillez à n'utiliser que des chiffres, des lettres et les caractères , . -" });
 			} else {
@@ -45,6 +45,6 @@ module.exports = (req, res, next) => {
 		}
 	} catch (error) {
 		console.log(error);
-		res.status(400).json({ error: 'Requête non valable' });
+		res.status(400).json({ error: "modification impossible" });
 	}
 };

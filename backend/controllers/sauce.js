@@ -148,7 +148,7 @@ exports.likeDislike = (req, res, next) => {
   switch (req.body.like) {
     // like
     case 1:
-      Sauce.updateOne(
+      SauceModele.updateOne(
         { _id: req.params.id },
         { $inc: { likes: 1 }, $push: { usersLiked: UID } }
       )
@@ -157,7 +157,7 @@ exports.likeDislike = (req, res, next) => {
       break;
     // dislike
     case -1:
-      Sauce.updateOne(
+      SauceModele.updateOne(
         { _id: req.params.id },
         { $inc: { dislikes: 1 }, $push: { usersDisliked: UID } }
       )
@@ -166,12 +166,12 @@ exports.likeDislike = (req, res, next) => {
       break;
     // retrait like ou dislike = if else
     case 0:
-      Sauce.findOne({ _id: req.params.id })
+      SauceModele.findOne({ _id: req.params.id })
         .then((sauce) => {
           var Liked = sauce.usersLiked;
           // si l'user a liké
           if (Liked.includes(UID)) {
-            Sauce.updateOne(
+            SauceModele.updateOne(
               { _id: req.params.id },
               {
                 $inc: { likes: -1 },
