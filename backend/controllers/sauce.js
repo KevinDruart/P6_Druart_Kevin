@@ -140,7 +140,6 @@ exports.deleteSauce = (req, res, next) => {
 
 };
 
-
 exports.likeDislike = (req, res, next) => {
   const UID = req.body.userId;
   //Sauce.findone de la sauce
@@ -187,21 +186,21 @@ exports.likeDislike = (req, res, next) => {
   //sinon si req.body.like === 0 alors
   else {
     //si  req.userIdToken existe dans  sauce.usersLiked
-    if (req.userIdToken === sauce.usersLiked) {
+    if (sauce.usersLiked.includes(req.userIdToken))  {
       //le retirer des likes
       //updateOne
       SauceModele.updateOne(
         { _id: req.params.id },
-        { $inc: { likes: -1 }, $push: { usersDisliked: UID } }
+        { $inc: { likes: -1 }, $push: { usersLiked: UID } }
       )
         //res 200
         .then(() => res.status(200).json({ message: "like retiré !" }))
         .catch((error) => res.status(400).json({ error }));
     }
     //sinon si  req.userIdToken existe dans  sauce.usersDisliked
-    else if (req.userIdToken === sauce.usersDisliked) {
+    else if (sauce.usersDisliked.includes(req.userIdToken)) {
       //le retirer des dislikes
-      updateOne
+      //updateOne
       SauceModele.updateOne(
         { _id: req.params.id },
         { $inc: { dislikes: -1 }, $push: { usersDisliked: UID } }

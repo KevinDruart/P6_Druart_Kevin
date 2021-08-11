@@ -7,27 +7,24 @@ const bcrypt = require('bcrypt');
 //schemas modele user
 const User = require('../models/user');
 
-const maskData = require('maskdata');
-
+const maskData = require('../node_modules/maskdata/index');
 
 /*-----------------------------------------SIGNUP--------------------------------------------*/
 // INSCRIPTION D'UN UTILISATEUR avec hashage MDP (BCRYPT) et encryptage email (crypto-js)
 exports.signup = (req, res, next) => {
-
   const saltRounds = 10;
   // On appelle la méthode hash de bcrypt 
   bcrypt.hash(req.body.password, saltRounds)
     // On récupère le hash de mdp qu'on va enregister en tant que nouvel utilisateur dans la BBD mongoDB
     .then(hash => {
 
-      //Definition des option de maskage email
+      //Definition des options de maskage email
       const emailMask2Options = {
         maskWith: "*",
         unmaskedStartCharactersBeforeAt: 2,
-        unmaskedEndCharactersAfterAt: 2,
+        unmaskedEndCharactersAfterAt: 3,
         maskAtTheRate: false
       };
-      
       // Création du nouvel utilisateur avec le modele user
       const user = new User({
         email: req.body.email,
@@ -35,23 +32,19 @@ exports.signup = (req, res, next) => {
         emailMasked: maskData.maskEmail2(req.body.email, emailMask2Options),
         password: hash
       });
-      console.log(user);
+      console.log(user + " 1");
       // On enregistre l'utilisateur dans la base de données
-      user.save()
-        //aucune erreur, l'utilisateur est créé
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        //une erreur avec adresse email 
-        .catch(error => res.status(400).json({ error: "adresse email deja utilisé" }));
+      user
+        //sauvegarde de l'utilisateur
+        .save()
+        .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
+        .catch(() => res.status(401).json({ error: "Email existant" }));
     })
-    .catch(error => res.status(500).json({ error: "erreur inscription" }));
+    .catch((error) => res.status(500).json({ error }));
 };
-
 
 /*-----------------------------------------LOGIN--------------------------------------------*/
 exports.login = (req, res, next) => {
-
-
-
   // On doit trouver l'utilisateur qui correspond à l'adresse entrée par l'utilisateur
   User.findOne({
     email: req.body.email
