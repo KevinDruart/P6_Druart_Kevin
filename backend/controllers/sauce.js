@@ -168,7 +168,7 @@ exports.likeDislike = (req, res, next) => {
     case 0:
       SauceModele.findOne({ _id: req.params.id })
         .then((sauce) => {
-          var Liked = sauce.usersLiked;
+          const Liked = sauce.usersLiked;
           // si l'user a liké
           if (Liked.includes(UID)) {
             SauceModele.updateOne(
