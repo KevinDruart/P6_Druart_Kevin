@@ -17,17 +17,6 @@
 ![100%](sopekocko.png)
 ***
 
-So Pekocko est une entreprise familiale de 10 salariés. Son activité principale est la création
-de sauces piquantes dont la composition est tenue secrète. Forte de son succès, l’entreprise
-souhaite se développer et créer une application web, dans laquelle les utilisateurs pourront
-ajouter leurs sauces préférées et liker ou disliker les sauces proposées par les autres.
-
-#### Points de vigilance
-
-L’entreprise ayant subi quelques attaques sur son site web ces dernières semaines, le
-fondateur souhaite que les données des utilisateurs soient parfaitement protégées.
-Pour cela, l’API utilisée devra impérativement respecter des pratiques de code sécurisé.
-
 #### Exigences concernant la sécurité :
 * l’API doit respecter le RGPD et les standards OWASP ;
 * le mot de passe des utilisateurs doit être chiffré ;
