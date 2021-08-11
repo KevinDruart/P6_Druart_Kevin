@@ -140,6 +140,81 @@ exports.deleteSauce = (req, res, next) => {
 
 };
 
+/*
+exports.likeDislike = (req, res, next) => {
+  const UID = req.body.userId;
+  Sauce.findone de la sauce
+  //si req.body.like === 1 alors
+  if (req.body.like === 1) {
+    //si req.userIdToken n'existe pas dans sauce.usersLiked et dans sauce.usersDisliked  
+    if (req.userIdToken !== sauce.userLiked && sauce.userDisliked) {
+      //alors on like la sauce
+      //updateOne
+      SauceModele.updateOne(
+        { _id: req.params.id },
+        { $inc: { likes: 1 }, $push: { usersLiked: UID } }
+      )
+        //res 200
+        .then(() => res.status(200).json({ message: "Sauce likée !" }))
+
+        .catch((error) => res.status(400).json({ error }));
+    }
+    //sinon res 400
+    else {
+      res.status(400).json({ error });
+    }
+  }
+  //sinon si req.body.like === -1 alors
+  else if (req.body.like === -1) {
+    //si req.userIdToken n'existe pas dans sauce.usersLiked et dans sauce.usersDisliked
+    if (req.userIdToken !== sauce.userLiked && sauce.userDisliked) {
+      //alors on dislike la sauce
+      //updateOne
+      SauceModele.updateOne(
+        { _id: req.params.id },
+        { $inc: { dislikes: 1 }, $push: { usersDisliked: UID } }
+      )
+        //res 200
+        .then(() => res.status(200).json({ message: "Sauce dislikée !" }))
+        .catch((error) => res.status(400).json({ error }));
+    }
+    //sinon res error 400
+    else {
+      res.status(400).json({ message: "impossible de disliké !" });
+    }
+  }
+  //sinon si req.body.like === 0 alors
+  else {
+    //si  req.userIdToken existe dans  sauce.usersLiked
+    if (req.userIdToken === sauce.usersLiked) {
+      //le retirer des likes
+      //updateOne
+      SauceModele.updateOne(
+        { _id: req.params.id },
+        { $inc: { likes: -1 }, $push: { usersDisliked: UID } }
+      )
+        //res 200
+        .then(() => res.status(200).json({ message: "like retiré !" }))
+        .catch((error) => res.status(400).json({ error }));
+    }
+    //sinon si  req.userIdToken existe dans  sauce.usersDisliked
+    else if (req.userIdToken === sauce.usersDisliked) {
+      le retirer des dislikes
+      updateOne
+      SauceModele.updateOne(
+        { _id: req.params.id },
+        { $inc: { dislikes: -1 }, $push: { usersDisliked: UID } }
+      )
+        //res 200
+        .then(() => res.status(200).json({ message: "dislike retiré !" }))
+        .catch((error) => res.status(400).json({ error }));
+    }
+  }
+}
+*/
+
+
+
 
 /*---------------Ajout/annulation d'un like / dislike à une sauce----------------- */
 exports.likeDislike = (req, res, next) => {
