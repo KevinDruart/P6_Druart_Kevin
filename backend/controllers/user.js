@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 //schemas modele user
 const User = require('../models/user');
 
-const masked = require('masked');
+const MaskData = require('maskdata');
 
 
 /*-----------------------------------------SIGNUP--------------------------------------------*/
@@ -24,17 +24,10 @@ exports.signup = (req, res, next) => {
       // Création du nouvel utilisateur avec le model
       const user = new User({
         email: req.body.email,
-        emailMasked: req.body.email,
+        emailMasked: maskData.maskEmail2(req.body.email),
         password: hash
       });
-
-      const maskedUser = masked(user,'emailMasked');
-      console.log(maskedUser);
-
-      user.emailMasked.push(maskedUser.emailMasked);
-
-      //console.log(user);
-
+      console.log(user.emailMasked);
       // On enregistre l'utilisateur dans la base de données
       user.save()
         //aucune erreur, l'utilisateur est créé
