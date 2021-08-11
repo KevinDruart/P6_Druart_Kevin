@@ -84,7 +84,7 @@ exports.modifySauce = (req, res, next) => {
         ...req.body
       }
     )
-  if (req.userIdToken === sauce.userId) {
+  if (req.userIdToken === sauceObject.userId) {
     SauceModele.updateOne(
       // On applique les paramètre de sauceObject
       {
@@ -117,13 +117,14 @@ exports.deleteSauce = (req, res, next) => {
         console.log(sauce);
         const filename = sauce.imageUrl.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
-          sauce.deleteOne({ _id: req.params.id })
+          SauceModele.deleteOne({ _id: req.params.id })
             .then(() => {
 
               res.status(200).json({ message: 'sauce supprimé !' })
 
             })
             .catch(error => {
+              console.log(error);
               console.log("erreur image desolidarisation avant suppression 1 sauce")
               res.status(400).json({ error: "suppresion une sauce" })
             });
@@ -137,13 +138,13 @@ exports.deleteSauce = (req, res, next) => {
       res.status(500).json({ error: "suppression une sauce requete" })
     });
 
-
 };
 
 /*
 exports.likeDislike = (req, res, next) => {
   const UID = req.body.userId;
-  Sauce.findone de la sauce
+  //Sauce.findone de la sauce
+  SauceModele.findOne({ _id: req.params.id })
   //si req.body.like === 1 alors
   if (req.body.like === 1) {
     //si req.userIdToken n'existe pas dans sauce.usersLiked et dans sauce.usersDisliked  
@@ -199,7 +200,7 @@ exports.likeDislike = (req, res, next) => {
     }
     //sinon si  req.userIdToken existe dans  sauce.usersDisliked
     else if (req.userIdToken === sauce.usersDisliked) {
-      le retirer des dislikes
+      //le retirer des dislikes
       updateOne
       SauceModele.updateOne(
         { _id: req.params.id },
@@ -211,9 +212,7 @@ exports.likeDislike = (req, res, next) => {
     }
   }
 }
-*/
-
-
+* /
 
 
 /*---------------Ajout/annulation d'un like / dislike à une sauce----------------- */

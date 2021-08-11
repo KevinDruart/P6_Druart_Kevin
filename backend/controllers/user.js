@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 //schemas modele user
 const User = require('../models/user');
 
-const MaskData = require('maskdata');
+const maskData = require('maskdata');
 
 
 /*-----------------------------------------SIGNUP--------------------------------------------*/
@@ -19,15 +19,23 @@ exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, saltRounds)
     // On récupère le hash de mdp qu'on va enregister en tant que nouvel utilisateur dans la BBD mongoDB
     .then(hash => {
-      //mask de l'adresse email
+
+      //Definition des option de maskage email
+      const emailMask2Options = {
+        maskWith: "*",
+        unmaskedStartCharactersBeforeAt: 2,
+        unmaskedEndCharactersAfterAt: 2,
+        maskAtTheRate: false
+      };
       
-      // Création du nouvel utilisateur avec le model
+      // Création du nouvel utilisateur avec le modele user
       const user = new User({
         email: req.body.email,
-        emailMasked: maskData.maskEmail2(req.body.email),
+        //maskage de l'email
+        emailMasked: maskData.maskEmail2(req.body.email, emailMask2Options),
         password: hash
       });
-      console.log(user.emailMasked);
+      console.log(user);
       // On enregistre l'utilisateur dans la base de données
       user.save()
         //aucune erreur, l'utilisateur est créé
