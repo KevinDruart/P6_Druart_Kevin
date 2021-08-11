@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const sanitizerPlugin = require('mongoose-sanitizer-plugin');
+const sanitizerPlugin = require('../node_modules/mongoose-sanitizer-plugin/index');
 
 const userSchema = mongoose.Schema({
   email: {
@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
     match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Veuillez entrer une adresse email correcte"]
   },
   emailMasked: {
-    type: String,
+    type: String
   },
   password: {
     type: String,
