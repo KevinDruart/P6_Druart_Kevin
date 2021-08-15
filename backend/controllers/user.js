@@ -7,17 +7,22 @@ const bcrypt = require('bcrypt');
 //schemas modele user
 const User = require('../models/user');
 
+//maskage email
 const maskData = require('../node_modules/maskdata/index');
 
-/*-----------------------------------------SIGNUP--------------------------------------------*/
-// INSCRIPTION D'UN UTILISATEUR avec hashage MDP (BCRYPT) et encryptage email (crypto-js)
-exports.signup = (req, res, next) => {
-  const saltRounds = 10;
-  // On appelle la méthode hash de bcrypt 
-  bcrypt.hash(req.body.password, saltRounds)
-    // On récupère le hash de mdp qu'on va enregister en tant que nouvel utilisateur dans la BBD mongoDB
-    .then(hash => {
 
+
+/*-----------------------------------------SIGNUP--------------------------------------------*/
+// INSCRIPTION D'UN UTILISATEUR avec hashage MDP (BCRYPT) et maskage email(maskdata)
+exports.signup = (req, res, next) => {
+  //On attribue un nombre de tour au hashage et ou salage
+  const saltRounds = 10;
+  // On appelle la méthode hash de bcrypt
+  bcrypt
+  //on hash le mot de passe 
+    .hash(req.body.password, saltRounds)
+    // On récupère le hash de mdp qu'on va enregister en tant que nouvel utilisateur dans la BBD mongoDB
+    .then((hash) => {
       //Definition des options de maskage email
       const emailMask2Options = {
         maskWith: "*",
@@ -30,9 +35,8 @@ exports.signup = (req, res, next) => {
         email: req.body.email,
         //maskage de l'email
         emailMasked: maskData.maskEmail2(req.body.email, emailMask2Options),
-        password: hash
+        password: hash,
       });
-      console.log(user + " 1");
       // On enregistre l'utilisateur dans la base de données
       user
         //sauvegarde de l'utilisateur
@@ -42,6 +46,7 @@ exports.signup = (req, res, next) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
+
 
 /*-----------------------------------------LOGIN--------------------------------------------*/
 exports.login = (req, res, next) => {
