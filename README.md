@@ -17,17 +17,6 @@
 ![100%](sopekocko.png)
 ***
 
-#### Exigences concernant la sécurité :
-* l’API doit respecter le RGPD et les standards OWASP ;
-
-
-#### Documentation complete du projet
-* Guidelines API: [ici](https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P6/Guidelines+API.pdf)
-* Si vous avez besoin de la note de cadrage [ici](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P6/P6_Note%20de%20cadrage%20So%20Pekocko_V3.pdf)
-
-
-#### Objectifs et Compétences évaluées
-
 ***Le but est de creer le backend d'un site e-commerce***
 
 * Implémenter un modèle logique de données conformément à la réglementation
