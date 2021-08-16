@@ -1,7 +1,3 @@
-### OpenClassrooms-Développeur Web
-
-
-
 ## Auteur
 
 👤 &nbsp; **Druart Kevin** [Contactez moi](<k.druart2@gmail.com>)
